@@ -1,0 +1,26 @@
+{
+    "version": "1.0.0",
+    "manifest_version": 2,
+    "name": "Enhanced Playback Rate",
+    "description": "Make the it posible to increase playback rates with hotkeys and make the pause hotkey reliable",
+    "browser_specific_settings": {
+        "gecko": {
+          "id": "{ccf0b67d-2ab0-4d01-955a-b9ff9db70031}"
+        }
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.twitch.tv/*",
+                "*://*.youtube.com/*"
+            ],
+            "js": [ "content-script.js" ],
+            "run_at": "document_idle"
+        }
+    ],
+    "web_accessible_resources": [ "player.js" ],
+    "permissions": [
+        "*://*.twitch.tv/*",
+        "*://*.youtube.com/*"
+    ]
+}
