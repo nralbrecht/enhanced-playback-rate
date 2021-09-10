@@ -8,7 +8,7 @@ script.addEventListener("load", function() {
 
 
 document.addEventListener("keydown", function(e) {
-    if (e.target.tagName !== "TEXTAREA" || e.target.tagName !== "INPUT") {
+    if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") {
         return;
     }
 
