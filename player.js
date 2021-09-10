@@ -228,6 +228,11 @@
             player.setPlaybackRate(event.data.value);
         }
         else if (event.data.action && event.data.action == "PLAY_PAUSE") {
+            if (player instanceof YoutubePlayer) {
+                // The YouTube play pause implementation is solid so it does not get currently overwritten.
+                return;
+            }
+
             player.togglePlayPause();
         }
     }, false);
