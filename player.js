@@ -12,61 +12,33 @@
         3,
         4,
         10,
-        20,
-        50,
-        100
+        20
     ];
 
-    class TwitchPlaybackRateIndicator {
-        constructor() {
-            this.install();
-        }
-
-        hide() {
-            this.pillContainerElement.style.cssText = "display: none !important";
-        }
-        show() {
-            this.pillContainerElement.style.cssText = "";
-        }
-        hideTwitchIndicator() {
-            for (let containerElement of document.querySelectorAll(".imZUzy")) {
-                if (containerElement !== this.pillContainerElement) {
-                    containerElement.style.cssText = "display: none !important";
-                }
-            }
-        }
-
-        install() {
-            this.pillTextElement = document.createElement("span");
-            this.pillTextElement.className = "CoreText-sc-cpl358-0 ScPill-sc-1cbrhuy-0 gAMVPE tw-pill";
-            this.pillTextElement.innerText = "1x";
-
-            this.pillContainerElement = document.createElement("div");
-            this.pillContainerElement.className = "ScTransitionBase-sc-eg1bd7-0 imZUzy tw-transition";
-            this.pillContainerElement.append(this.pillTextElement);
-
-            const controlGroupRight = document.querySelector(".player-controls__right-control-group");
-            controlGroupRight.prepend(this.pillContainerElement);
-
-            this.hide();
-        }
+    class TwitchMenuPlaybackRateIndicator {
         update(currentRate) {
-            this.pillTextElement.innerText = String(currentRate) + "x*";
+            const pillTextElement = document.querySelector(".gAMVPE");
 
-            if (currentRate == 1) {
-                this.hide();
+            if (pillTextElement) {
+                pillTextElement.innerText = String(currentRate) + "X";
             }
-            else {
-                this.show();
-            }
+        }
+    }
 
-            this.hideTwitchIndicator();
-            setTimeout(() => {
-                this.hideTwitchIndicator();
-            }, 250);
-            setTimeout(() => {
-                this.hideTwitchIndicator();
-            }, 500);
+    class TwitchChatHeaderPlaybackRateIndicator {
+        constructor() {
+            const chatHeaderElement = document.querySelector(".video-chat__header");
+            const chatHeaderTextElement = chatHeaderElement.querySelector("span");
+
+            this.chatHeaderPlaybackRateElement = chatHeaderTextElement.cloneNode(true);
+            this.chatHeaderPlaybackRateElement.style.cssText = "position: absolute; right: 1rem;";
+            this.chatHeaderPlaybackRateElement.innerText = "1x";
+
+            chatHeaderElement.appendChild(this.chatHeaderPlaybackRateElement);
+        }
+
+        update(currentRate) {
+            this.chatHeaderPlaybackRateElement.innerText = String(currentRate) + "x";
         }
     }
 
@@ -112,13 +84,18 @@
                 this.pause();
             }
         }
+
+        toggleTheaterMode() {
+            throw new Exception("not implemented");
+        }
     }
 
     class TwitchPlayer extends Player {
         constructor() {
             super();
 
-            this.playbackRateIndicator = new TwitchPlaybackRateIndicator();
+            this.playbackRateIndicatorMenu = new TwitchMenuPlaybackRateIndicator();
+            this.playbackRateIndicatorChatHeader = new TwitchChatHeaderPlaybackRateIndicator();
 
             const intervalHandle = setInterval(() => {
                 if (window.FrankerFaceZ && this.playerElement.setFFZPlaybackRate) {
@@ -142,7 +119,8 @@
             const currentPlaybackRate = PLAYBACK_RATES[playbackRateIndex];
 
             this.playerElement.setFFZPlaybackRate(currentPlaybackRate);
-            this.playbackRateIndicator.update(currentPlaybackRate);
+            this.playbackRateIndicatorMenu.update(currentPlaybackRate);
+            this.playbackRateIndicatorChatHeader.update(currentPlaybackRate);
         }
 
         play() {
@@ -153,6 +131,15 @@
         }
         isPaused() {
             return this.playerElement.paused;
+        }
+
+        toggleTheaterMode() {
+            for (let button of document.querySelectorAll(".player-controls__right-control-group button")) {
+                if (button.dataset["aTarget"] === "player-theatre-mode-button") {
+                    button.click();
+                    break;
+                }
+            }
         }
     }
 
@@ -200,6 +187,10 @@
         isPaused() {
             return this.playerElement.getPlayerState() == 2;
         }
+
+        toggleTheaterMode() {
+            document.querySelector(".ytp-size-button").click();
+        }
     }
 
     let player = null;
@@ -213,7 +204,7 @@
     }
 
     window.addEventListener("message", function(event) {
-        if (event.source != window || !event.data.source && event.data.source != "ENHANCED_PLAYBACK_RATE") {
+        if (event.source != window || event.data?.source !== "ENHANCED_PLAYBACK_RATE") {
             return;
         }
 
@@ -227,13 +218,21 @@
             player.decreasePlaybackRate();
             player.setPlaybackRate(event.data.value);
         }
-        else if (event.data.action && event.data.action == "PLAY_PAUSE") {
+        else if (event.data.action && event.data.action == "TOGGLE_PLAY_PAUSE") {
             if (player instanceof YoutubePlayer) {
                 // The YouTube play pause implementation is solid so it does not get currently overwritten.
                 return;
             }
 
             player.togglePlayPause();
+        }
+        else if (event.data.action && event.data.action == "TOGGLE_THEATER_MODE") {
+            if (player instanceof YoutubePlayer) {
+                // The YouTube theater mode implementation is solid so it does not get currently overwritten.
+                return;
+            }
+
+            player.toggleTheaterMode();
         }
     }, false);
 })();

@@ -70,12 +70,29 @@ document.addEventListener("keydown", function(e) {
 
         e.preventDefault();
     }
+    else if (e.code == "Digit5") {
+        window.postMessage({
+            "source": "ENHANCED_PLAYBACK_RATE",
+            "action": "SET_PLAYBACK_RATE",
+            "value": 11
+        });
+
+        e.preventDefault();
+    }
     else if (e.code == "Space"
             && e.target !== document.body) {
 
         window.postMessage({
             "source": "ENHANCED_PLAYBACK_RATE",
-            "action": "PLAY_PAUSE"
+            "action": "TOGGLE_PLAY_PAUSE"
+        });
+
+        e.preventDefault();
+    }
+    else if (e.code == "KeyT") {
+        window.postMessage({
+            "source": "ENHANCED_PLAYBACK_RATE",
+            "action": "TOGGLE_THEATER_MODE"
         });
 
         e.preventDefault();
