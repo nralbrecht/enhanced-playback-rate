@@ -1,20 +1,4 @@
 (function(){
-    const PLAYBACK_RATES = [
-        0.05,
-        0.1,
-        0.25,
-        0.5,
-        0.75,
-        1,
-        1.25,
-        1.5,
-        2,
-        3,
-        4,
-        10,
-        20
-    ];
-
     class TwitchMenuPlaybackRateIndicator {
         update(currentRate) {
             const pillTextElement = document.querySelector(".gAMVPE");
@@ -44,16 +28,48 @@
 
     class Player {
         constructor() {
-            this.currentPlaybackRateIndex = 5;
+            this.PLAYBACK_RATES = [
+                0.05,
+                0.1,
+                0.25,
+                0.5,
+                0.75,
+                1,
+                1.25,
+                1.5,
+                2,
+                3,
+                4,
+                10,
+                20
+            ];
+            this.playbackRate = 1;
+        }
+
+        get playbackRate() {
+            return this.PLAYBACK_RATES[this.currentPlaybackRateIndex];
+        }
+        set playbackRate(playbackRate) {
+            const closestRate = this.PLAYBACK_RATES.reduce((previous, current) => {
+                if (Math.abs(current - playbackRate) < Math.abs(previous - playbackRate)) {
+                    return current;
+                }
+                else {
+                    return previous;
+                }
+            });
+
+            this.currentPlaybackRateIndex = this.PLAYBACK_RATES.indexOf(closestRate);
         }
 
         increasePlaybackRate() {
-            if (this.currentPlaybackRateIndex >= PLAYBACK_RATES.length - 1) {
+            if (this.currentPlaybackRateIndex >= this.PLAYBACK_RATES.length - 1) {
                 // cant increase further
                 return;
             }
 
-            this.setPlaybackRate(this.currentPlaybackRateIndex + 1);
+            this.currentPlaybackRateIndex += 1;
+            this.applyPlaybackRate();
         }
         decreasePlaybackRate() {
             if (this.currentPlaybackRateIndex <= 0) {
@@ -61,31 +77,14 @@
                 return;
             }
 
-            this.setPlaybackRate(this.currentPlaybackRateIndex - 1);
+            this.currentPlaybackRateIndex -= 1;
+            this.applyPlaybackRate();
         }
-        setPlaybackRate(playbackRateIndex) {
-            throw new Exception("not implemented");
+        setPlaybackRate(playbackRate) {
+            this.playbackRate = playbackRate;
+            this.applyPlaybackRate();
         }
-
-        play() {
-            throw new Exception("not implemented");
-        }
-        pause() {
-            throw new Exception("not implemented");
-        }
-        isPaused() {
-            throw new Exception("not implemented");
-        }
-        togglePlayPause() {
-            if (this.isPaused()) {
-                this.play();
-            }
-            else {
-                this.pause();
-            }
-        }
-
-        toggleTheaterMode() {
+        applyPlaybackRate() {
             throw new Exception("not implemented");
         }
     }
@@ -97,30 +96,53 @@
             this.playbackRateIndicatorMenu = new TwitchMenuPlaybackRateIndicator();
             this.playbackRateIndicatorChatHeader = new TwitchChatHeaderPlaybackRateIndicator();
 
-            const intervalHandle = setInterval(() => {
-                if (window.FrankerFaceZ && this.playerElement.setFFZPlaybackRate) {
-                    this.setPlaybackRate(this.currentPlaybackRateIndex);
-                    clearInterval(intervalHandle);
+            this.setPlaybackRate(this.playbackRate);
+
+            window.addEventListener("message", event => {
+                if (event.source != window || event.data?.source !== "ENHANCED_PLAYBACK_RATE") {
+                    return;
                 }
-            }, 250);
+
+                if (event.data.action && event.data.action == "INCREASE_PLAYBACK_RATE") {
+                    this.increasePlaybackRate();
+                }
+                else if (event.data.action && event.data.action == "DECREASE_PLAYBACK_RATE") {
+                    this.decreasePlaybackRate();
+                }
+                else if (event.data.action && event.data.action == "SET_PLAYBACK_RATE" && event.data.value) {
+                    this.setPlaybackRate(event.data.value);
+                }
+                else if (event.data.action && event.data.action == "TOGGLE_PLAY_PAUSE") {
+                    this.togglePlayPause();
+                }
+                else if (event.data.action && event.data.action == "TOGGLE_THEATER_MODE") {
+                    this.toggleTheaterMode();
+                }
+            }, false);
         }
 
         get playerElement() {
             return document.querySelector("video");
         }
 
-        setPlaybackRate(playbackRateIndex) {
-            if (playbackRateIndex < 0 || playbackRateIndex >= PLAYBACK_RATES.length) {
-                // out of bounds
-                return;
+        setPlaybackRate(playbackRate) {
+            if (window.FrankerFaceZ && this.playerElement.setFFZPlaybackRate) {
+                super.setPlaybackRate(playbackRate);
             }
-
-            this.currentPlaybackRateIndex = playbackRateIndex;
-            const currentPlaybackRate = PLAYBACK_RATES[playbackRateIndex];
-
-            this.playerElement.setFFZPlaybackRate(currentPlaybackRate);
-            this.playbackRateIndicatorMenu.update(currentPlaybackRate);
-            this.playbackRateIndicatorChatHeader.update(currentPlaybackRate);
+            else {
+                // FrankerFaceZ not yet initialized
+                const intervalHandle = setInterval(() => {
+                    if (this.playerElement.setFFZPlaybackRate) {
+                        super.setPlaybackRate(playbackRate);
+                        clearInterval(intervalHandle);
+                    }
+                }, 250);
+            }
+        }
+        applyPlaybackRate() {
+            this.playerElement.setFFZPlaybackRate(this.playbackRate);
+            this.playbackRateIndicatorMenu.update(this.playbackRate);
+            this.playbackRateIndicatorChatHeader.update(this.playbackRate);
         }
 
         play() {
@@ -129,8 +151,16 @@
         pause() {
             return this.playerElement.pause();
         }
-        isPaused() {
+        get paused() {
             return this.playerElement.paused;
+        }
+        togglePlayPause() {
+            if (this.paused) {
+                this.play();
+            }
+            else {
+                this.pause();
+            }
         }
 
         toggleTheaterMode() {
@@ -144,52 +174,31 @@
     }
 
     class YoutubePlayer extends Player {
+        constructor() {
+            super();
+
+            this.setPlaybackRate(this.playbackRate);
+
+            window.addEventListener("message", event => {
+                if (event.source != window || event.data?.source !== "ENHANCED_PLAYBACK_RATE") {
+                    return;
+                }
+
+                if (event.data.action && event.data.action == "INCREASE_PLAYBACK_RATE") {
+                    this.increasePlaybackRate();
+                }
+                else if (event.data.action && event.data.action == "DECREASE_PLAYBACK_RATE") {
+                    this.decreasePlaybackRate();
+                }
+            }, false);
+        }
+
         get playerElement() {
             return document.getElementById("movie_player");
         }
 
-        increasePlaybackRate() {
-            if (this.currentPlaybackRateIndex >= PLAYBACK_RATES.length - 1) {
-                // cant increase further
-                return;
-            }
-
-            this.setPlaybackRate(this.currentPlaybackRateIndex + 1);
-        }
-
-        decreasePlaybackRate() {
-            if (this.currentPlaybackRateIndex <= 0) {
-                // cant decrease further
-                return;
-            }
-
-            this.setPlaybackRate(this.currentPlaybackRateIndex - 1);
-        }
-
-        setPlaybackRate(playbackRateIndex) {
-            if (playbackRateIndex < 0 || playbackRateIndex >= PLAYBACK_RATES.length) {
-                // out of bounds
-                return;
-            }
-
-            this.currentPlaybackRateIndex = playbackRateIndex;
-            const currentPlaybackRate = PLAYBACK_RATES[playbackRateIndex];
-
-            this.playerElement.setPlaybackRate(currentPlaybackRate);
-        }
-
-        play() {
-            return this.playerElement.playVideo();
-        }
-        pause() {
-            return this.playerElement.pauseVideo();
-        }
-        isPaused() {
-            return this.playerElement.getPlayerState() == 2;
-        }
-
-        toggleTheaterMode() {
-            document.querySelector(".ytp-size-button").click();
+        applyPlaybackRate() {
+            this.playerElement.setPlaybackRate(this.playbackRate);
         }
     }
 
@@ -202,37 +211,4 @@
     else if (hostNameComponents[hostNameComponents.length - 2] == "youtube") {
         player = new YoutubePlayer();
     }
-
-    window.addEventListener("message", function(event) {
-        if (event.source != window || event.data?.source !== "ENHANCED_PLAYBACK_RATE") {
-            return;
-        }
-
-        if (event.data.action && event.data.action == "INCREASE_PLAYBACK_RATE") {
-            player.increasePlaybackRate();
-        }
-        else if (event.data.action && event.data.action == "DECREASE_PLAYBACK_RATE") {
-            player.decreasePlaybackRate();
-        }
-        else if (event.data.action && event.data.action == "SET_PLAYBACK_RATE" && event.data.value) {
-            player.decreasePlaybackRate();
-            player.setPlaybackRate(event.data.value);
-        }
-        else if (event.data.action && event.data.action == "TOGGLE_PLAY_PAUSE") {
-            if (player instanceof YoutubePlayer) {
-                // The YouTube play pause implementation is solid so it does not get currently overwritten.
-                return;
-            }
-
-            player.togglePlayPause();
-        }
-        else if (event.data.action && event.data.action == "TOGGLE_THEATER_MODE") {
-            if (player instanceof YoutubePlayer) {
-                // The YouTube theater mode implementation is solid so it does not get currently overwritten.
-                return;
-            }
-
-            player.toggleTheaterMode();
-        }
-    }, false);
 })();

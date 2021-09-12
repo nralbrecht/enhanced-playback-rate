@@ -38,7 +38,7 @@ document.addEventListener("keydown", function(e) {
         window.postMessage({
             "source": "ENHANCED_PLAYBACK_RATE",
             "action": "SET_PLAYBACK_RATE",
-            "value": 5
+            "value": 1
         });
 
         e.preventDefault();
@@ -47,7 +47,7 @@ document.addEventListener("keydown", function(e) {
         window.postMessage({
             "source": "ENHANCED_PLAYBACK_RATE",
             "action": "SET_PLAYBACK_RATE",
-            "value": 7
+            "value": 1.5
         });
 
         e.preventDefault();
@@ -56,7 +56,7 @@ document.addEventListener("keydown", function(e) {
         window.postMessage({
             "source": "ENHANCED_PLAYBACK_RATE",
             "action": "SET_PLAYBACK_RATE",
-            "value": 8
+            "value": 2
         });
 
         e.preventDefault();
@@ -65,7 +65,7 @@ document.addEventListener("keydown", function(e) {
         window.postMessage({
             "source": "ENHANCED_PLAYBACK_RATE",
             "action": "SET_PLAYBACK_RATE",
-            "value": 10
+            "value": 4
         });
 
         e.preventDefault();
@@ -74,7 +74,7 @@ document.addEventListener("keydown", function(e) {
         window.postMessage({
             "source": "ENHANCED_PLAYBACK_RATE",
             "action": "SET_PLAYBACK_RATE",
-            "value": 11
+            "value": 10
         });
 
         e.preventDefault();
