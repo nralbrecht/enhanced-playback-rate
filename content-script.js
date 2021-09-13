@@ -97,4 +97,12 @@ document.addEventListener("keydown", function(e) {
 
         e.preventDefault();
     }
+    else if (e.code == "Enter") {
+        window.postMessage({
+            "source": "ENHANCED_PLAYBACK_RATE",
+            "action": "FOCUS_CHAT"
+        });
+
+        e.preventDefault();
+    }
 });

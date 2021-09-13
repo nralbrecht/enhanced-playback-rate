@@ -10,19 +10,23 @@
     }
 
     class TwitchChatHeaderPlaybackRateIndicator {
-        constructor() {
-            const chatHeaderElement = document.querySelector(".video-chat__header");
-            const chatHeaderTextElement = chatHeaderElement.querySelector("span");
-
-            this.chatHeaderPlaybackRateElement = chatHeaderTextElement.cloneNode(true);
-            this.chatHeaderPlaybackRateElement.style.cssText = "position: absolute; right: 1rem;";
-            this.chatHeaderPlaybackRateElement.innerText = "1x";
-
-            chatHeaderElement.appendChild(this.chatHeaderPlaybackRateElement);
-        }
-
         update(currentRate) {
-            this.chatHeaderPlaybackRateElement.innerText = String(currentRate) + "x";
+            if (this.chatHeaderPlaybackRateElement) {
+                this.chatHeaderPlaybackRateElement.innerText = String(currentRate) + "x";
+            }
+            else {
+                const chatHeaderElement = document.querySelector(".video-chat__header");
+
+                if (chatHeaderElement) {
+                    const chatHeaderTextElement = chatHeaderElement.querySelector("span");
+
+                    this.chatHeaderPlaybackRateElement = chatHeaderTextElement.cloneNode(true);
+                    this.chatHeaderPlaybackRateElement.style.cssText = "position: absolute; right: 1rem;";
+                    this.chatHeaderPlaybackRateElement.innerText = "1x";
+
+                    chatHeaderElement.appendChild(this.chatHeaderPlaybackRateElement);
+                }
+            }
         }
     }
 
@@ -118,6 +122,9 @@
                 else if (event.data.action && event.data.action == "TOGGLE_THEATER_MODE") {
                     this.toggleTheaterMode();
                 }
+                else if (event.data.action && event.data.action == "FOCUS_CHAT") {
+                    this.focusChat();
+                }
             }, false);
         }
 
@@ -169,6 +176,14 @@
                     button.click();
                     break;
                 }
+            }
+        }
+
+        focusChat() {
+            const chatInputElement = document.querySelector(".chat-input__textarea textarea");
+
+            if (chatInputElement) {
+                chatInputElement.focus();
             }
         }
     }
