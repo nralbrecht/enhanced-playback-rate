@@ -7,102 +7,134 @@ script.addEventListener("load", function() {
 (document.head || document.documentElement).appendChild(script);
 
 
+function doesHotkeyMatchEvent(hotkey, event) {
+    return hotkey.code == event.code
+        && (!hotkey.ctrlKey || hotkey.ctrlKey == event.ctrlKey)
+        && (!hotkey.shiftKey || hotkey.shiftKey == event.shiftKey)
+        && (!hotkey.metaKey || hotkey.metaKey == event.metaKey)
+        && (!hotkey.altKey || hotkey.altKey == event.altKey);
+}
+
+const hotkeys = [
+    {
+        hotkey: {
+            code: "Period"
+        },
+        action: "INCREASE_PLAYBACK_RATE"
+    },
+    {
+        hotkey: {
+            code: "BracketRight"
+        },
+        action: "INCREASE_PLAYBACK_RATE"
+    },
+    {
+        hotkey: {
+            code: "ArrowUp",
+            ctrlKey: true
+        },
+        action: "INCREASE_PLAYBACK_RATE"
+    },
+    {
+        hotkey: {
+            code: "Comma"
+        },
+        action: "DECREASE_PLAYBACK_RATE"
+    },
+    {
+        hotkey: {
+            code: "Backslash"
+        },
+        action: "DECREASE_PLAYBACK_RATE"
+    },
+    {
+        hotkey: {
+            code: "ArrowDown",
+            ctrlKey: true
+        },
+        action: "DECREASE_PLAYBACK_RATE"
+    },
+    {
+        hotkey: {
+            code: "Digit1"
+        },
+        action: "SET_PLAYBACK_RATE",
+        arguments: {
+            newPlaybackRate: 1
+        }
+    },
+    {
+        hotkey: {
+            code: "Digit2"
+        },
+        action: "SET_PLAYBACK_RATE",
+        arguments: {
+            newPlaybackRate: 1.5
+        }
+    },
+    {
+        hotkey: {
+            code: "Digit3"
+        },
+        action: "SET_PLAYBACK_RATE",
+        arguments: {
+            newPlaybackRate: 2
+        }
+    },
+    {
+        hotkey: {
+            code: "Digit4"
+        },
+        action: "SET_PLAYBACK_RATE",
+        arguments: {
+            newPlaybackRate: 4
+        }
+    },
+    {
+        hotkey: {
+            code: "Digit5"
+        },
+        action: "SET_PLAYBACK_RATE",
+        arguments: {
+            newPlaybackRate: 10
+        }
+    },
+    {
+        hotkey: {
+            code: "Space"
+        },
+        action: "TOGGLE_PLAY_PAUSE"
+    },
+    {
+        hotkey: {
+            code: "KeyT"
+        },
+        action: "TOGGLE_THEATER_MODE"
+    },
+    {
+        hotkey: {
+            code: "Enter"
+        },
+        action: "FOCUS_CHAT"
+    }
+];
+
 document.addEventListener("keydown", function(e) {
     if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") {
         return;
     }
 
-    if (e.code == "Period"
-            || e.code == "BracketRight"
-            || (e.code == "ArrowUp" && e.ctrlKey)) {
+    for (const hotkey of hotkeys) {
+        if (doesHotkeyMatchEvent(hotkey.hotkey, e)) {
+            window.postMessage({
+                "source": "ENHANCED_PLAYBACK_RATE",
+                "action": hotkey.action,
+                "targetIsBody": e.target === document.body,
+                ...hotkey.arguments
+            });
 
-        window.postMessage({
-            "source": "ENHANCED_PLAYBACK_RATE",
-            "action": "INCREASE_PLAYBACK_RATE"
-        });
-
-        e.preventDefault();
-    }
-    else if (e.code == "Comma"
-            || e.code == "Backslash"
-            || (e.code == "ArrowDown" && e.ctrlKey)) {
-
-        window.postMessage({
-            "source": "ENHANCED_PLAYBACK_RATE",
-            "action": "DECREASE_PLAYBACK_RATE"
-        });
-
-        e.preventDefault();
-    }
-    else if (e.code == "Digit1") {
-        window.postMessage({
-            "source": "ENHANCED_PLAYBACK_RATE",
-            "action": "SET_PLAYBACK_RATE",
-            "value": 1
-        });
-
-        e.preventDefault();
-    }
-    else if (e.code == "Digit2") {
-        window.postMessage({
-            "source": "ENHANCED_PLAYBACK_RATE",
-            "action": "SET_PLAYBACK_RATE",
-            "value": 1.5
-        });
-
-        e.preventDefault();
-    }
-    else if (e.code == "Digit3") {
-        window.postMessage({
-            "source": "ENHANCED_PLAYBACK_RATE",
-            "action": "SET_PLAYBACK_RATE",
-            "value": 2
-        });
-
-        e.preventDefault();
-    }
-    else if (e.code == "Digit4") {
-        window.postMessage({
-            "source": "ENHANCED_PLAYBACK_RATE",
-            "action": "SET_PLAYBACK_RATE",
-            "value": 4
-        });
-
-        e.preventDefault();
-    }
-    else if (e.code == "Digit5") {
-        window.postMessage({
-            "source": "ENHANCED_PLAYBACK_RATE",
-            "action": "SET_PLAYBACK_RATE",
-            "value": 10
-        });
-
-        e.preventDefault();
-    }
-    else if (e.code == "Space"
-            && e.target !== document.body) {
-
-        window.postMessage({
-            "source": "ENHANCED_PLAYBACK_RATE",
-            "action": "TOGGLE_PLAY_PAUSE"
-        });
-
-        e.preventDefault();
-    }
-    else if (e.code == "KeyT") {
-        window.postMessage({
-            "source": "ENHANCED_PLAYBACK_RATE",
-            "action": "TOGGLE_THEATER_MODE"
-        });
-
-        e.preventDefault();
-    }
-    else if (e.code == "Enter") {
-        window.postMessage({
-            "source": "ENHANCED_PLAYBACK_RATE",
-            "action": "FOCUS_CHAT"
-        });
-
-        e.preventDefault();
+            e.preventDefault();
+            return;
+        }
     }
 });
