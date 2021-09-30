@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 1em;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+html {
+    font-family: "Segoe UI", sans-serif;
+    font-size: 62.5%;
+    padding: 0 5px;
+    --red: rgb(175, 10, 10);
+}
+
+input:invalid {
+    box-shadow: 0 0 1.5px 1px var(--red);
+}
+
+button {
+    color: white;
+    background-color: rgb(72, 72, 84);
+    font-size: 1.1rem;
+    height: 2.4rem;
+    appearance: none;
+    border: none;
+    border-radius: 2px;
+    padding: 0 1rem;
+}
+button:hover {
+    background-color: rgb(92, 92, 106);
+}
+button.red:hover {
+    background-color: var(--red);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+}
+header h1 {
+    font-size: 2rem;
+}
+header button {
+    font-size: 1.3rem;
+    margin: 0.1rem;
+}
+
+.preference {
+    font-size: 1.5rem;
+    padding: 2px 0;
+    margin-bottom: 1rem;
+    border-top: 1px solid hsla(210,4%,10%,.2);
+    min-height: 8rem;
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+}
+
+.remove-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 1.5rem;
+    border: none;
+    background-color: grey;
+    color: #fff;
+    font-family: monospace;
+    font-weight: bold;
+    height: 2rem;
+    width: 2rem;
+    min-width: 2rem;
+    cursor: pointer;
+}
+.remove-button:hover {
+    background-color: var(--red);
+}
+
+.preference-left {
+    flex: 1;
+}
+.preference-right {
+    flex: 2;
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+.input-wrapper label {
+    font-size: 1.5rem;
+}
+.input-wrapper input, .input-wrapper select {
+    padding: 0.3rem 0 0.3rem 0.5rem;
+    height: 3rem;
+    border: 1px solid #223;
+    border-radius: 2px;
+}
+
+.preference-arguments {
+    margin-top: 0.5rem;
+    margin-left: 3rem;
+}

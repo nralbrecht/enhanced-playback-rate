@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Enhanced Playback Rate - Options</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="options.css">
+        <script defer type="text/javascript" src="vue.global.prod.js"></script>
+        <script defer type="text/javascript" src="options.js"></script>
+    </head>
+    <body>
+        <header>
+            <h1>Hotkeys</h1>
+            <button
+                title="Add new hotkey to the list"
+                @click="addNewHotkey()"
+            >Add Hotkey</button>
+            <button
+                class="red"
+                title="Reset all hotkeys to defaults"
+                @click="resetHotkeys()"
+            >Reset</button>
+        </header>
+        <hotkey-input
+            v-for="(hotkey, index) in hotkeys"
+            :hotkey="hotkey"
+            :actions="actions"
+            @update:hotkey="updateHotkey(index, $event)"
+            @update:action="updateAction(index, $event)"
+            @update:argument="updateArgument(index, $event['key'], $event['newValue'])"
+            @remove="removeHotkey(index)"
+        ></hotkey-input>
+    </body>
+</html>

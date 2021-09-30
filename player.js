@@ -133,13 +133,13 @@
         }
 
         setPlaybackRate(playbackRate) {
-            if (window.FrankerFaceZ && this.playerElement.setFFZPlaybackRate) {
+            if (window?.FrankerFaceZ && this.playerElement?.setFFZPlaybackRate) {
                 super.setPlaybackRate(playbackRate);
             }
             else {
                 // FrankerFaceZ not yet initialized
                 const intervalHandle = setInterval(() => {
-                    if (this.playerElement.setFFZPlaybackRate) {
+                    if (this.playerElement?.setFFZPlaybackRate) {
                         super.setPlaybackRate(playbackRate);
                         clearInterval(intervalHandle);
                     }

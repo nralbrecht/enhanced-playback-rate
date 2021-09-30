@@ -1,0 +1,115 @@
+[
+    {
+        "hotkey": {
+            "key": ".",
+            "code": "Period"
+        },
+        "action": "INCREASE_PLAYBACK_RATE"
+    },
+    {
+        "hotkey": {
+            "key": "+",
+            "code": "BracketRight"
+        },
+        "action": "INCREASE_PLAYBACK_RATE"
+    },
+    {
+        "hotkey": {
+            "key": "Up",
+            "code": "ArrowUp",
+            "ctrlKey": true
+        },
+        "action": "INCREASE_PLAYBACK_RATE"
+    },
+    {
+        "hotkey": {
+            "key": ",",
+            "code": "Comma"
+        },
+        "action": "DECREASE_PLAYBACK_RATE"
+    },
+    {
+        "hotkey": {
+            "key": "#",
+            "code": "Backslash"
+        },
+        "action": "DECREASE_PLAYBACK_RATE"
+    },
+    {
+        "hotkey": {
+            "key": "Down",
+            "code": "ArrowDown",
+            "ctrlKey": true
+        },
+        "action": "DECREASE_PLAYBACK_RATE"
+    },
+    {
+        "hotkey": {
+            "key": "1",
+            "code": "Digit1"
+        },
+        "action": "SET_PLAYBACK_RATE",
+        "arguments": {
+            "newPlaybackRate": 1
+        }
+    },
+    {
+        "hotkey": {
+            "key": "2",
+            "code": "Digit2"
+        },
+        "action": "SET_PLAYBACK_RATE",
+        "arguments": {
+            "newPlaybackRate": 1.5
+        }
+    },
+    {
+        "hotkey": {
+            "key": "3",
+            "code": "Digit3"
+        },
+        "action": "SET_PLAYBACK_RATE",
+        "arguments": {
+            "newPlaybackRate": 2
+        }
+    },
+    {
+        "hotkey": {
+            "key": "4",
+            "code": "Digit4"
+        },
+        "action": "SET_PLAYBACK_RATE",
+        "arguments": {
+            "newPlaybackRate": 4
+        }
+    },
+    {
+        "hotkey": {
+            "key": "5",
+            "code": "Digit5"
+        },
+        "action": "SET_PLAYBACK_RATE",
+        "arguments": {
+            "newPlaybackRate": 10
+        }
+    },
+    {
+        "hotkey": {
+            "code": "Space"
+        },
+        "action": "TOGGLE_PLAY_PAUSE"
+    },
+    {
+        "hotkey": {
+            "key": "t",
+            "code": "KeyT"
+        },
+        "action": "TOGGLE_THEATER_MODE"
+    },
+    {
+        "hotkey": {
+            "code": "Enter"
+        },
+        "action": "FOCUS_CHAT"
+    }
+]
