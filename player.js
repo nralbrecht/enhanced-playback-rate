@@ -208,6 +208,12 @@
                 else if (event.data.action && event.data.action == "SET_PLAYBACK_RATE" && event.data.newPlaybackRate) {
                     this.setPlaybackRate(event.data.newPlaybackRate);
                 }
+                else if (event.data.action && event.data.action == "TOGGLE_PLAY_PAUSE" && !event.data.targetIsBody) {
+                    this.togglePlayPause();
+                }
+                else if (event.data.action && event.data.action == "TOGGLE_THEATER_MODE") {
+                    this.toggleTheaterMode();
+                }
             }, false);
         }
 
@@ -217,6 +223,29 @@
 
         applyPlaybackRate() {
             this.playerElement.setPlaybackRate(this.playbackRate);
+        }
+
+        play() {
+            return this.playerElement.playVideo();
+        }
+        pause() {
+            return this.playerElement.pauseVideo();
+        }
+        get paused() {
+            return this.playerElement.getPlayerState() == 2;
+        }
+
+        togglePlayPause() {
+            if (this.paused) {
+                this.play();
+            }
+            else {
+                this.pause();
+            }
+        }
+
+        toggleTheaterMode() {
+            document.querySelector(".ytp-size-button").click();
         }
     }
 

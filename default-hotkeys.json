@@ -109,7 +109,7 @@
             "code": "Space"
         },
         "action": "TOGGLE_PLAY_PAUSE",
-        "websites": ["TWITCH", "YOUTUBE"]
+        "websites": ["TWITCH"]
     },
     {
         "hotkey": {
@@ -117,7 +117,7 @@
             "code": "KeyT"
         },
         "action": "TOGGLE_THEATER_MODE",
-        "websites": ["TWITCH", "YOUTUBE"]
+        "websites": ["TWITCH"]
     },
     {
         "hotkey": {
