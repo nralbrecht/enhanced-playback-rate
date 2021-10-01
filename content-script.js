@@ -29,11 +29,26 @@ chrome.storage.local.get("hotkeys", function(result) {
 
 function doesHotkeyMatchEvent(hotkey, event) {
     return hotkey
-        && hotkey.code == event.code
-        && (!hotkey.ctrlKey || hotkey.ctrlKey == event.ctrlKey)
-        && (!hotkey.shiftKey || hotkey.shiftKey == event.shiftKey)
-        && (!hotkey.metaKey || hotkey.metaKey == event.metaKey)
-        && (!hotkey.altKey || hotkey.altKey == event.altKey);
+        && hotkey?.hotkey
+        && hotkey.hotkey.code == event.code
+        && (!hotkey.hotkey.ctrlKey || hotkey.hotkey.ctrlKey == event.ctrlKey)
+        && (!hotkey.hotkey.shiftKey || hotkey.hotkey.shiftKey == event.shiftKey)
+        && (!hotkey.hotkey.metaKey || hotkey.hotkey.metaKey == event.metaKey)
+        && (!hotkey.hotkey.altKey || hotkey.hotkey.altKey == event.altKey);
+}
+
+const website = [
+    { key: "TWITCH", pattern: /.*:\/\/.*\.twitch\.tv\/.*/ },
+    { key: "YOUTUBE", pattern: /.*:\/\/.*\.youtube\.com\/.*/ }
+].filter(site => {
+    return site.pattern.test(document.location.href);
+}).map(site => {
+    return site.key;
+})?.[0];
+
+function doesHotkeyMatchWebsite(hotkey) {
+    return hotkey?.websites
+        && hotkey.websites.indexOf(website) != -1;
 }
 
 document.addEventListener("keydown", function(event) {
@@ -42,7 +57,10 @@ document.addEventListener("keydown", function(event) {
     }
 
     for (const hotkey of hotkeys) {
-        if (hotkey?.action && doesHotkeyMatchEvent(hotkey?.hotkey, event)) {
+        if (hotkey?.action
+                && doesHotkeyMatchWebsite(hotkey)
+                && doesHotkeyMatchEvent(hotkey, event)) {
+
             window.postMessage({
                 "source": "ENHANCED_PLAYBACK_RATE",
                 "action": hotkey.action,

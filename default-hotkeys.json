@@ -4,14 +4,16 @@
             "key": ".",
             "code": "Period"
         },
-        "action": "INCREASE_PLAYBACK_RATE"
+        "action": "INCREASE_PLAYBACK_RATE",
+        "websites": ["TWITCH", "YOUTUBE"]
     },
     {
         "hotkey": {
             "key": "+",
             "code": "BracketRight"
         },
-        "action": "INCREASE_PLAYBACK_RATE"
+        "action": "INCREASE_PLAYBACK_RATE",
+        "websites": ["TWITCH", "YOUTUBE"]
     },
     {
         "hotkey": {
@@ -19,21 +21,24 @@
             "code": "ArrowUp",
             "ctrlKey": true
         },
-        "action": "INCREASE_PLAYBACK_RATE"
+        "action": "INCREASE_PLAYBACK_RATE",
+        "websites": ["TWITCH", "YOUTUBE"]
     },
     {
         "hotkey": {
             "key": ",",
             "code": "Comma"
         },
-        "action": "DECREASE_PLAYBACK_RATE"
+        "action": "DECREASE_PLAYBACK_RATE",
+        "websites": ["TWITCH", "YOUTUBE"]
     },
     {
         "hotkey": {
             "key": "#",
             "code": "Backslash"
         },
-        "action": "DECREASE_PLAYBACK_RATE"
+        "action": "DECREASE_PLAYBACK_RATE",
+        "websites": ["TWITCH", "YOUTUBE"]
     },
     {
         "hotkey": {
@@ -41,7 +46,8 @@
             "code": "ArrowDown",
             "ctrlKey": true
         },
-        "action": "DECREASE_PLAYBACK_RATE"
+        "action": "DECREASE_PLAYBACK_RATE",
+        "websites": ["TWITCH", "YOUTUBE"]
     },
     {
         "hotkey": {
@@ -49,6 +55,7 @@
             "code": "Digit1"
         },
         "action": "SET_PLAYBACK_RATE",
+        "websites": ["TWITCH"],
         "arguments": {
             "newPlaybackRate": 1
         }
@@ -59,6 +66,7 @@
             "code": "Digit2"
         },
         "action": "SET_PLAYBACK_RATE",
+        "websites": ["TWITCH"],
         "arguments": {
             "newPlaybackRate": 1.5
         }
@@ -69,6 +77,7 @@
             "code": "Digit3"
         },
         "action": "SET_PLAYBACK_RATE",
+        "websites": ["TWITCH"],
         "arguments": {
             "newPlaybackRate": 2
         }
@@ -79,6 +88,7 @@
             "code": "Digit4"
         },
         "action": "SET_PLAYBACK_RATE",
+        "websites": ["TWITCH"],
         "arguments": {
             "newPlaybackRate": 4
         }
@@ -89,6 +99,7 @@
             "code": "Digit5"
         },
         "action": "SET_PLAYBACK_RATE",
+        "websites": ["TWITCH"],
         "arguments": {
             "newPlaybackRate": 10
         }
@@ -97,19 +108,22 @@
         "hotkey": {
             "code": "Space"
         },
-        "action": "TOGGLE_PLAY_PAUSE"
+        "action": "TOGGLE_PLAY_PAUSE",
+        "websites": ["TWITCH", "YOUTUBE"]
     },
     {
         "hotkey": {
             "key": "t",
             "code": "KeyT"
         },
-        "action": "TOGGLE_THEATER_MODE"
+        "action": "TOGGLE_THEATER_MODE",
+        "websites": ["TWITCH", "YOUTUBE"]
     },
     {
         "hotkey": {
             "code": "Enter"
         },
-        "action": "FOCUS_CHAT"
+        "action": "FOCUS_CHAT",
+        "websites": ["TWITCH"]
     }
 ]

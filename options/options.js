@@ -4,16 +4,16 @@ const HotkeyList = {
             hotkeys: [],
             actions: {
                 INCREASE_PLAYBACK_RATE: {
-                    description: "Increase Playback Rate"
+                    label: "Increase Playback Rate"
                 },
                 DECREASE_PLAYBACK_RATE: {
-                    description: "Decrease Playback Rate"
+                    label: "Decrease Playback Rate"
                 },
                 SET_PLAYBACK_RATE: {
-                    description: "Set Playback Rate To Value",
+                    label: "Set Playback Rate To Value",
                     arguments: {
                         newPlaybackRate: {
-                            description: "New Playback Rate",
+                            label: "New Playback Rate",
                             placeholder: "eg. 1",
                             defaultValue: "",
                             type: "number"
@@ -21,13 +21,21 @@ const HotkeyList = {
                     }
                 },
                 TOGGLE_PLAY_PAUSE: {
-                    description: "Toggle Play Pause"
+                    label: "Toggle Play Pause"
                 },
                 TOGGLE_THEATER_MODE: {
-                    description: "Toggle Theater Mode"
+                    label: "Toggle Theater Mode"
                 },
                 FOCUS_CHAT: {
-                    description: "Focus Twitch Chat"
+                    label: "Focus Live Stream Chat"
+                }
+            },
+            websites: {
+                TWITCH: {
+                    label: "Twitch"
+                },
+                YOUTUBE: {
+                    label: "YouTube"
                 }
             }
         }
@@ -49,7 +57,6 @@ const HotkeyList = {
                 chrome.storage.local.set({
                     "hotkeys": serializedHotkeys
                 });
-                console.log("updated hotkeys", serializedHotkeys);
             },
             deep: true
         }
@@ -59,15 +66,12 @@ const HotkeyList = {
             this.hotkeys[index].hotkey = newHotkey;
         },
         updateAction(index, newAction) {
-            console.log("update action", index, newAction);
-
             this.hotkeys[index].action = newAction;
 
             if (this.actions[newAction]?.arguments) {
                 for (let key in this.actions[newAction].arguments) {
                     const argument = this.actions[newAction].arguments[key];
 
-                    console.log(argument);
                     this.hotkeys[index].arguments = {
                         [key]: argument.defaultValue
                     };
@@ -78,8 +82,18 @@ const HotkeyList = {
             }
         },
         updateArgument(index, argumentKey, newValue) {
-            console.log("updateArgument", index, argumentKey, newValue);
             this.hotkeys[index].arguments[argumentKey] = newValue;
+        },
+        updateWebsites(index, website, checked) {
+            const websites = this.hotkeys[index].websites;
+            const websiteIndex = websites.indexOf(website);
+
+            if (websiteIndex == -1 && checked) {
+                websites.push(website);
+            }
+            else if (websiteIndex != -1 && !checked) {
+                websites.splice(websiteIndex, 1);
+            }
         },
         removeHotkey(index) {
             this.hotkeys.splice(index, 1);
@@ -95,7 +109,8 @@ const HotkeyList = {
         addNewHotkey() {
             this.hotkeys.push({
                 "hotkey": null,
-                "action": ""
+                "action": "",
+                "websites": []
             });
         }
     }
@@ -113,8 +128,8 @@ const KEY_IGNORE_LIST = [
 ];
 
 const HotkeyComponent = {
-    props: ["hotkey", "actions"],
-    emits: ["update:hotkey", "update:action", "update:argument", "remove"],
+    props: ["hotkey", "actions", "websites"],
+    emits: ["update:hotkey", "update:action", "update:argument", "update:websites", "remove"],
     template: `
         <div class="preference">
             <button class="remove-button"
@@ -131,17 +146,29 @@ const HotkeyComponent = {
             </div>
             <div class="preference-right">
                 <div class="input-wrapper">
+                    <label>Websites</label>
+                    <div class="websites">
+                        <div class="input-wrapper row" v-for="(website, key) in websites">
+                            <input type="checkbox"
+                                :value="key"
+                                :checked="hotkey?.websites?.indexOf(key) != -1"
+                                @change="websitesOnChange">
+                            <label>{{ website.label }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-wrapper">
                     <label>Action</label>
                     <select :value="hotkey.action" @change="actionOnChange">
                         <option v-for="(action, key) in actions" :value="key">
-                            {{ action.description }}
+                            {{ action.label }}
                         </option>
                         <option value="">--Choose an action--</option>
                     </select>
                 </div>
                 <div class="preference-arguments" v-for="(argument, key) in hotkey?.arguments">
                     <div class="input-wrapper" :data-key="key" :data-value="argument">
-                        <label>{{ actions[hotkey.action].arguments[key].description }}</label>
+                        <label>{{ actions[hotkey.action].arguments[key].label }}</label>
                         <input :value="argument"
                             step="any"
                             :type="actions[hotkey.action].arguments[key].type"
@@ -208,6 +235,12 @@ const HotkeyComponent = {
         },
         actionOnChange(event) {
             this.$emit("update:action", event.target.value);
+        },
+        websitesOnChange(event) {
+            this.$emit("update:websites", {
+                "website": event.target.value,
+                "checked": event.target.checked
+            });
         }
     },
 }
@@ -215,4 +248,3 @@ const HotkeyComponent = {
 let app = Vue.createApp(HotkeyList)
     .component("hotkey-input", HotkeyComponent)
     .mount("body");
-

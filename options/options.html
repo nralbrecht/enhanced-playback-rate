@@ -10,24 +10,13 @@
     <body>
         <header>
             <h1>Hotkeys</h1>
-            <button
-                title="Add new hotkey to the list"
-                @click="addNewHotkey()"
-            >Add Hotkey</button>
-            <button
-                class="red"
-                title="Reset all hotkeys to defaults"
-                @click="resetHotkeys()"
-            >Reset</button>
+            <button title="Add new hotkey to the list" @click="addNewHotkey()">Add Hotkey</button>
+            <button class="red" title="Reset all hotkeys to defaults" @click="resetHotkeys()">Reset</button>
         </header>
-        <hotkey-input
-            v-for="(hotkey, index) in hotkeys"
-            :hotkey="hotkey"
-            :actions="actions"
-            @update:hotkey="updateHotkey(index, $event)"
-            @update:action="updateAction(index, $event)"
-            @update:argument="updateArgument(index, $event['key'], $event['newValue'])"
-            @remove="removeHotkey(index)"
-        ></hotkey-input>
+        <hotkey-input v-for="(hotkey, index) in hotkeys" :hotkey="hotkey" :actions="actions" :websites="websites"
+            @update:hotkey="updateHotkey(index, $event)" @update:action="updateAction(index, $event)"
+            @update:websites="updateWebsites(index, $event['website'], $event['checked'])"
+            @update:argument="updateArgument(index, $event['key'], $event['newValue'])" @remove="removeHotkey(index)">
+        </hotkey-input>
     </body>
 </html>

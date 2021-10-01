@@ -87,14 +87,47 @@ header button {
     display: flex;
     flex-direction: column;
 }
+.input-wrapper.row {
+    flex-direction: row;
+}
 .input-wrapper label {
     font-size: 1.5rem;
 }
-.input-wrapper input, .input-wrapper select {
+.input-wrapper input {
     padding: 0.3rem 0 0.3rem 0.5rem;
     height: 3rem;
     border: 1px solid #223;
     border-radius: 2px;
+}
+.input-wrapper select {
+    padding: 0.3rem 0 0.3rem 0;
+    height: 3rem;
+    border: 1px solid #223;
+    border-radius: 2px;
+
+}
+.input-wrapper select[multiple] {
+    height: unset;
+}
+.input-wrapper option {
+    padding: 0.2rem 0 0.2rem 0.5rem;
+    box-sizing: content-box;
+}
+
+.websites {
+    display: flex;
+    gap: 2.5rem;
+    align-items: baseline;
+}
+.websites input {
+    margin: 0.2rem 0;
+    margin-right: 0.75rem;
+    height: 2rem;
+    width: 2rem;
+}
+.websites label {
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .preference-arguments {

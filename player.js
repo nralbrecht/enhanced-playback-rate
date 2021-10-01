@@ -205,6 +205,9 @@
                 else if (event.data.action && event.data.action == "DECREASE_PLAYBACK_RATE") {
                     this.decreasePlaybackRate();
                 }
+                else if (event.data.action && event.data.action == "SET_PLAYBACK_RATE" && event.data.newPlaybackRate) {
+                    this.setPlaybackRate(event.data.newPlaybackRate);
+                }
             }, false);
         }
 
@@ -217,13 +220,12 @@
         }
     }
 
-    let player = null;
-
-    const hostNameComponents = document.location.hostname.split(".");
-    if (hostNameComponents[hostNameComponents.length - 2] == "twitch") {
-        player = new TwitchPlayer();
-    }
-    else if (hostNameComponents[hostNameComponents.length - 2] == "youtube") {
-        player = new YoutubePlayer();
-    }
+    const player = [
+        { key: "TWITCH", player: TwitchPlayer, pattern: /.*:\/\/.*\.twitch\.tv\/.*/ },
+        { key: "YOUTUBE", player: YoutubePlayer, pattern: /.*:\/\/.*\.youtube\.com\/.*/ }
+    ].filter(site => {
+        return site.pattern.test(document.location.href);
+    }).map(site => {
+        return new site.player();
+    });
 })();
