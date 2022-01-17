@@ -28,7 +28,13 @@ const HotkeyList = {
                 },
                 FOCUS_CHAT: {
                     label: "Focus Live Stream Chat"
-                }
+                },
+                FRAME_FORWARD: {
+                    label: "Go To Next Frame"
+                },
+                FRAME_BACK: {
+                    label: "Go To Last Frame"
+                },
             },
             websites: {
                 TWITCH: {

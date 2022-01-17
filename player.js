@@ -1,7 +1,7 @@
 (function(){
     class TwitchMenuPlaybackRateIndicator {
         update(currentRate) {
-            const pillTextElement = document.querySelector(".gAMVPE");
+            const pillTextElement = document.querySelector(".player-controls .player-controls__right-control-group .tw-pill");
 
             if (pillTextElement) {
                 pillTextElement.innerText = String(currentRate) + "X";
@@ -125,6 +125,12 @@
                 else if (event.data.action && event.data.action == "FOCUS_CHAT") {
                     this.focusChat();
                 }
+                else if (event.data.action && event.data.action == "FRAME_FORWARD") {
+                    this.frameForward();
+                }
+                else if (event.data.action && event.data.action == "FRAME_BACK") {
+                    this.frameBack();
+                }
             }, false);
         }
 
@@ -185,6 +191,17 @@
             if (chatInputElement) {
                 chatInputElement.focus();
             }
+        }
+
+        get frameTime() {
+            // TODO: find current FPS
+            return 1/60;
+        }
+        frameForward() {
+            this.playerElement.currentTime = Math.max(0, this.playerElement.currentTime - this.frameTime);
+        }
+        frameBack() {
+            this.playerElement.currentTime = Math.min(this.playerElement.duration, this.playerElement.currentTime + this.frameTime);
         }
     }
 
