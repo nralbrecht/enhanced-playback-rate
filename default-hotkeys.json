@@ -5,7 +5,15 @@
             "code": "Period"
         },
         "action": "INCREASE_PLAYBACK_RATE",
-        "websites": ["TWITCH", "YOUTUBE"]
+        "websites": ["TWITCH"]
+    },
+    {
+        "hotkey": {
+            "key": ",",
+            "code": "Comma"
+        },
+        "action": "DECREASE_PLAYBACK_RATE",
+        "websites": ["TWITCH"]
     },
     {
         "hotkey": {
@@ -17,27 +25,19 @@
     },
     {
         "hotkey": {
+            "key": "#",
+            "code": "Backslash"
+        },
+        "action": "DECREASE_PLAYBACK_RATE",
+        "websites": ["TWITCH", "YOUTUBE"]
+    },
+    {
+        "hotkey": {
             "key": "Up",
             "code": "ArrowUp",
             "ctrlKey": true
         },
         "action": "INCREASE_PLAYBACK_RATE",
-        "websites": ["TWITCH", "YOUTUBE"]
-    },
-    {
-        "hotkey": {
-            "key": ",",
-            "code": "Comma"
-        },
-        "action": "DECREASE_PLAYBACK_RATE",
-        "websites": ["TWITCH", "YOUTUBE"]
-    },
-    {
-        "hotkey": {
-            "key": "#",
-            "code": "Backslash"
-        },
-        "action": "DECREASE_PLAYBACK_RATE",
         "websites": ["TWITCH", "YOUTUBE"]
     },
     {
@@ -125,5 +125,47 @@
         },
         "action": "FOCUS_CHAT",
         "websites": ["TWITCH"]
+    },
+    {
+        "hotkey": {
+            "code": "PageUp"
+        },
+        "action": "SKIP_FORWARD",
+        "websites": ["TWITCH"],
+        "arguments": {
+            "seconds": 0.25
+        }
+    },
+    {
+        "hotkey": {
+            "code": "PageDown"
+        },
+        "action": "SKIP_BACK",
+        "websites": ["TWITCH"],
+        "arguments": {
+            "seconds": 0.25
+        }
+    },
+    {
+        "hotkey": {
+            "code": "PageUp",
+            "shiftKey": true
+        },
+        "action": "SKIP_FORWARD",
+        "websites": ["TWITCH"],
+        "arguments": {
+            "seconds": 0.033
+        }
+    },
+    {
+        "hotkey": {
+            "code": "PageDown",
+            "shiftKey": true
+        },
+        "action": "SKIP_BACK",
+        "websites": ["TWITCH"],
+        "arguments": {
+            "seconds": 0.033
+        }
     }
 ]

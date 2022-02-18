@@ -91,6 +91,10 @@
         applyPlaybackRate() {
             throw new Exception("not implemented");
         }
+
+        seek(seconds) {
+            this.playerElement.currentTime = Math.max(0, Math.min(this.playerElement.duration, this.playerElement.currentTime + seconds));
+        }
     }
 
     class TwitchPlayer extends Player {
@@ -125,11 +129,11 @@
                 else if (event.data.action && event.data.action == "FOCUS_CHAT") {
                     this.focusChat();
                 }
-                else if (event.data.action && event.data.action == "FRAME_FORWARD") {
-                    this.frameForward();
+                else if (event.data.action && event.data.action == "SKIP_FORWARD") {
+                    this.seek(Number(event.data.seconds));
                 }
-                else if (event.data.action && event.data.action == "FRAME_BACK") {
-                    this.frameBack();
+                else if (event.data.action && event.data.action == "SKIP_BACK") {
+                    this.seek(-Number(event.data.seconds));
                 }
             }, false);
         }
@@ -192,17 +196,6 @@
                 chatInputElement.focus();
             }
         }
-
-        get frameTime() {
-            // TODO: find current FPS
-            return 1/60;
-        }
-        frameForward() {
-            this.playerElement.currentTime = Math.max(0, this.playerElement.currentTime - this.frameTime);
-        }
-        frameBack() {
-            this.playerElement.currentTime = Math.min(this.playerElement.duration, this.playerElement.currentTime + this.frameTime);
-        }
     }
 
     class YoutubePlayer extends Player {
@@ -230,6 +223,12 @@
                 }
                 else if (event.data.action && event.data.action == "TOGGLE_THEATER_MODE") {
                     this.toggleTheaterMode();
+                }
+                else if (event.data.action && event.data.action == "SKIP_FORWARD") {
+                    this.seek(Number(event.data.seconds));
+                }
+                else if (event.data.action && event.data.action == "SKIP_BACK") {
+                    this.seek(-Number(event.data.seconds));
                 }
             }, false);
         }

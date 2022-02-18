@@ -29,12 +29,28 @@ const HotkeyList = {
                 FOCUS_CHAT: {
                     label: "Focus Live Stream Chat"
                 },
-                FRAME_FORWARD: {
-                    label: "Go To Next Frame"
+                SKIP_FORWARD: {
+                    label: "Go Forward",
+                    arguments: {
+                        seconds: {
+                            label: "Seconds",
+                            placeholder: "eg. 0.0166",
+                            defaultValue: "0.0166",
+                            type: "number"
+                        }
+                    }
                 },
-                FRAME_BACK: {
-                    label: "Go To Last Frame"
-                },
+                SKIP_BACK: {
+                    label: "Go Backward",
+                    arguments: {
+                        seconds: {
+                            label: "Seconds",
+                            placeholder: "eg. 0.0166",
+                            defaultValue: "0.0166",
+                            type: "number"
+                        }
+                    }
+                }
             },
             websites: {
                 TWITCH: {

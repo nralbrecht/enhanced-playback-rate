@@ -7,14 +7,55 @@ script.addEventListener("load", function() {
 (document.head || document.documentElement).appendChild(script);
 
 let hotkeys = [];
+function hotkeySpecificity(hotkey) {
+    let specificity = 0;
+
+    if (hotkey.hotkey.ctrlKey) {
+        specificity |= 1;
+    }
+    else if (hotkey.hotkey.shiftKey) {
+        specificity |= 2;
+    }
+    else if (hotkey.hotkey.metaKey) {
+        specificity |= 4;
+    }
+    else if (hotkey.hotkey.altKey) {
+        specificity |= 8;
+    }
+
+    return specificity;
+}
+function sortHotkeys() {
+    hotkeys.sort((a, b) => {
+        if (!a?.hotkey) {
+            return -1;
+        }
+        else if (!b?.hotkey) {
+            return 1;
+        }
+        else if (a.hotkey.code === b.hotkey.code) {
+            return hotkeySpecificity(b) - hotkeySpecificity(a);
+        }
+        else {
+            if (a.hotkey.code > b.hotkey.code) {
+                return -1;
+            }
+            else {
+                return 1;
+            }
+        }
+    });
+}
 chrome.storage.onChanged.addListener(function(changes) {
     if (changes?.hotkeys?.newValue) {
         hotkeys = changes.hotkeys.newValue;
+        sortHotkeys();
     }
 });
 chrome.storage.local.get("hotkeys", function(result) {
     if (result?.hotkeys) {
         hotkeys = result.hotkeys;
+        sortHotkeys();
     }
     else {
         fetch(chrome.runtime.getURL("default-hotkeys.json"))
@@ -69,6 +110,7 @@ document.addEventListener("keydown", function(event) {
             });
 
             event.preventDefault();
+            break;
         }
     }
 });
