@@ -25,3 +25,13 @@
 html.fullscreen-chat {
     font-size: 130% !important;
 }
+
+
+html.hide-controls .video-player__overlay {
+    display: none !important;
+}
+
+
+html.hide-pause-button .player-overlay-background {
+    display: none !important;
+}

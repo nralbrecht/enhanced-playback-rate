@@ -14,4 +14,4 @@ Add-on for Firefox and Google Chrome
 - Mute Twitch streams in multple tabs
 - Hide pause overlay
 - Hide video controls
-
+- Set volume

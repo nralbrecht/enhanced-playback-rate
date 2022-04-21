@@ -138,6 +138,12 @@
                 else if (event.data.action && event.data.action == "TOGGLE_FULLSCREEN_CHAT") {
                     this.toggleFullscreenChat();
                 }
+                else if (event.data.action && event.data.action == "TOGGLE_HIDE_CONTROLS") {
+                    this.toggleHideControls();
+                }
+                else if (event.data.action && event.data.action == "TOGGLE_PAUSE_BUTTON") {
+                    this.togglePauseButton();
+                }
             }, false);
         }
 
@@ -202,6 +208,12 @@
 
         toggleFullscreenChat() {
             document.querySelector("html").classList.toggle("fullscreen-chat");
+        }
+        toggleHideControls() {
+            document.querySelector("html").classList.toggle("hide-controls");
+        }
+        togglePauseButton() {
+            document.querySelector("html").classList.toggle("hide-pause-button");
         }
     }
 

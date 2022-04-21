@@ -53,6 +53,12 @@ const HotkeyList = {
                 },
                 TOGGLE_FULLSCREEN_CHAT: {
                     label: "Toggle Fullscreen Chat"
+                },
+                TOGGLE_HIDE_CONTROLS: {
+                    label: "Toggle Hide Controls"
+                },
+                TOGGLE_PAUSE_BUTTON: {
+                    label: "Toggle Hide Pause Button"
                 }
             },
             websites: {
