@@ -50,6 +50,9 @@ const HotkeyList = {
                             type: "number"
                         }
                     }
+                },
+                TOGGLE_FULLSCREEN_CHAT: {
+                    label: "Toggle Fullscreen Chat"
                 }
             },
             websites: {

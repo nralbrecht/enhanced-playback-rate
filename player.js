@@ -135,6 +135,9 @@
                 else if (event.data.action && event.data.action == "SKIP_BACK") {
                     this.seek(-Number(event.data.seconds));
                 }
+                else if (event.data.action && event.data.action == "TOGGLE_FULLSCREEN_CHAT") {
+                    this.toggleFullscreenChat();
+                }
             }, false);
         }
 
@@ -195,6 +198,10 @@
             if (chatInputElement) {
                 chatInputElement.focus();
             }
+        }
+
+        toggleFullscreenChat() {
+            document.querySelector("html").classList.toggle("fullscreen-chat");
         }
     }
 
@@ -262,6 +269,10 @@
 
         toggleTheaterMode() {
             document.querySelector(".ytp-size-button").click();
+        }
+
+        setVolume(value) {
+            this.playerElement.setVolume(value);
         }
     }
 

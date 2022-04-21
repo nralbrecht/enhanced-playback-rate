@@ -167,5 +167,12 @@
         "arguments": {
             "seconds": 0.033
         }
+    },
+    {
+        "hotkey": {
+            "code": "Slash"
+        },
+        "action": "TOGGLE_FULLSCREEN_CHAT",
+        "websites": ["TWITCH"]
     }
 ]

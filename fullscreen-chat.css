@@ -1,0 +1,27 @@
+.fullscreen-chat .right-column--theatre, .fullscreen-chat .right-column--beside {
+    width: 100vw !important;
+}
+
+.fullscreen-chat .channel-root__right-column, .fullscreen-chat .channel-root__right-column--expanded {
+    transform: translateX(0) translateY(0) !important;
+    transition-duration: 0s !important;
+    width: 100vw !important;
+}
+
+.fullscreen-chat .right-column--below {
+    display: block !important;
+    height: 100% !important;
+}
+
+.fullscreen-chat #sideNav {
+    opacity: 0;
+    width: 0;
+}
+
+.fullscreen-chat main.twilight-main {
+    display: none !important;
+}
+
+html.fullscreen-chat {
+    font-size: 130% !important;
+}
