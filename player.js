@@ -250,6 +250,53 @@
                     this.seek(-Number(event.data.seconds));
                 }
             }, false);
+
+            let lastRemovedVideoId = null;
+            setInterval(() => {
+                // check if watch later ist being played
+                if (this.playerElement.getPlaylistId() !== "WL") {
+                    return;
+                }
+
+                // check if current video was already removed from watch later
+                const currentVideoId = this.playerElement.getVideoData()?.video_id;
+
+                if (lastRemovedVideoId && lastRemovedVideoId === currentVideoId) {
+                    return;
+                }
+
+                // check if either:
+                // 95% of the video was played or
+                // there are less than 20 seconds left
+                const videoDuration = this.playerElement.getDuration();
+                const currentTime = this.playerElement.getCurrentTime();
+
+                const videoProgress = currentTime / videoDuration;
+                const secondsToEnd = 20;
+
+                if (videoProgress < 0.95 && currentTime < (videoDuration - secondsToEnd)) {
+                    return;
+                }
+
+                // press the "Watch Later" button in the title bar
+                // the first press will add the video to watch later
+                // if it already is it will do nothing
+                lastRemovedVideoId = currentVideoId;
+                this.addToWatchLater();
+
+                // check if the first button press is still loading
+                const pollIntervalHandle = setInterval(() => {
+                    if (!document.querySelector(".ytp-watch-later-icon .ytp-spinner-container")) {
+                        clearInterval(pollIntervalHandle);
+
+                        // press the "Watch Later" button in the title bar a second time
+                        // this will always remove the video
+                        console.log("Removed", currentVideoId, "from 'Watch Later'");
+                        this.addToWatchLater();
+                    }
+                }, 100);
+                setTimeout(() => clearInterval(pollIntervalHandle), 10000);
+            }, 1000);
         }
 
         get playerElement() {
@@ -268,6 +315,11 @@
         }
         get paused() {
             return this.playerElement.getPlayerState() == 2;
+        }
+
+        addToWatchLater() {
+            const watchLaterButton = document.querySelector(".ytp-watch-later-button");
+            watchLaterButton.click();
         }
 
         togglePlayPause() {
