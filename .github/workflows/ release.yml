@@ -1,0 +1,27 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  tagged-release:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Create release artefact
+        run: zip -r9 enhanced_playback_rate-$(jq -r '.version' manifest.json).zip . --exclude \*.zip .\*
+      -
+        name: Tagged Release
+        id: release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          draft: true
+          prerelease: false
+          title: Enhanced Playback Rate ${{ github.ref_name }}
+          files: "*.zip"
