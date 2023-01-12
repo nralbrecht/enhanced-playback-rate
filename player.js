@@ -221,7 +221,9 @@
         constructor() {
             super();
 
-            this.setPlaybackRate(this.playbackRate);
+            setTimeout(() => {
+                this.setPlaybackRate(this.playbackRate);
+            }, 1000);
 
             window.addEventListener("message", event => {
                 if (event.source != window || event.data?.source !== "ENHANCED_PLAYBACK_RATE") {
